@@ -1,0 +1,21 @@
+---
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body class="grid place-items-center h-screen" >
+    <div id="text" ></div>
+	</body>
+</html>
+<script>
+  const res = await fetch(`${Astro.site}/2`)
+  const data = await res.json()
+  const elem = document.getElementById('text')
+  if(!elem) return
+  elem.innerText = data
+</script>
