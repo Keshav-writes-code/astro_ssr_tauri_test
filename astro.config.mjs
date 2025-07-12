@@ -11,7 +11,5 @@ export default defineConfig({
     }),
     svelte(),
   ],
-
-  site: "https://astro-ssr-tauri-test.vercel.app/",
   adapter: vercel(),
 });
