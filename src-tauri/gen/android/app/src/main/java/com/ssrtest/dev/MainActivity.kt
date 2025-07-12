@@ -1,3 +1,3 @@
-package com.test.dev
+package com.ssrtest.dev
 
 class MainActivity : TauriActivity()

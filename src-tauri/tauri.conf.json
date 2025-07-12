@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "android_app_with_ssr",
+  "productName": "ssr_test",
   "version": "0.1.0",
-  "identifier": "com.test.dev",
+  "identifier": "com.ssrtest.dev",
   "build": {
     "frontendDist": "../dist/client/",
     "devUrl": "http://localhost:4321",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "android_app_with_ssr",
+        "title": "ss_test",
         "width": 800,
         "height": 600,
         "resizable": true,

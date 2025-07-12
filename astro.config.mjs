@@ -1,15 +1,9 @@
-import { defineConfig } from "astro/config";
-import UnoCSS from "unocss/astro";
-import svelte from "@astrojs/svelte";
+// @ts-check
+import { defineConfig } from 'astro/config';
 
-import vercel from "@astrojs/vercel";
+import vercel from '@astrojs/vercel';
 
+// https://astro.build/config
 export default defineConfig({
-  integrations: [
-    UnoCSS({
-      injectReset: true,
-    }),
-    svelte(),
-  ],
-  adapter: vercel(),
+  adapter: vercel()
 });

@@ -1,76 +1,47 @@
-# DUAS
+# Astro Starter Kit: Minimal
 
-A Template for your next Web Project
-
-- `D` - DaisyUi
-- `U` - Unocss
-- `A` - AstroJs
-- `S` - Svelte
-
-
-## Installation / Initialize / Setup
-
-Initalize a DUAS Project with
-
-bun
-```bash
-bun create astro@latest -- --template Keshav-writes-code/DUAS-template
+```sh
+bun create astro@latest -- --template minimal
 ```
 
-## Stuff Included
-### Packages
-- Daisyui (latest)
-- Unocss (latest)
-  - Default Unocss Stuff
-  - Unocss Icones Preset (with Tabler Icones Set)
-  - tailwind (latest) (used only to serve DaisyUi Classes)
-- Astro (latest)
-- Svelte (latest)
-### Deplot to GH Pages
-- Change the value for `base` key in `astro.config.mjs` to basically Define a Sub Path that comes after `https://<your_github_username>.github.io/...` for gh pages hosting
-- example: `astro.config.mjs`
-```js
-import { defineConfig } from "astro/config";
-import UnoCSS from "unocss/astro";
-import svelte from "@astrojs/svelte";
-import tailwind from "@astrojs/tailwind";
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
 
-export default defineConfig({
-  integrations: [UnoCSS({
-    injectReset: true,
-  }), svelte(), tailwind()],
-  site: "https://Keshav-writes-code.github.io",
-  base: "new_project",
-});
-```
-- Path on GH Pages = `https://keshavWebDev-personal.github.io/new_project`
-- when you do your First Push of a project created with this template (with the `base` and `site` params set) on Github, it will be automatically deployed to GH Pages with the above mentioned resulting URL  
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
+## 🚀 Project Structure
 
-## Installation & Setup in one Go
+Inside of your Astro project, you'll see the following folders and files:
 
-Copy Paste this in your Bash \ Zsh Terminal
-
-**For** : `Linux : Debian / Ubuntu`
-```bash
-# Installs Git
-sudo apt-get install git &&
-
-# Installs Node
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash &&
-nvm install 22 &&
-
-# Installs Bun
-curl -fsSL https://bun.sh/install | bash &&
-
-# Initialize a project with template in Current Directory
-bun create astro@latest -- --template Keshav-writes-code/DUAS-template#master
-
+```text
+/
+├── public/
+├── src/
+│   └── pages/
+│       └── index.astro
+└── package.json
 ```
 
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-## Screenshots
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
-![localhost_4321_Project_Name](https://github.com/user-attachments/assets/1e772f1e-e4a3-4a6d-8f55-5b97283d01f7)
+Any static assets, like images, can be placed in the `public/` directory.
 
+## 🧞 Commands
 
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `bun install`             | Installs dependencies                            |
+| `bun dev`             | Starts local dev server at `localhost:4321`      |
+| `bun build`           | Build your production site to `./dist/`          |
+| `bun preview`         | Preview your build locally, before deploying     |
+| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `bun astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

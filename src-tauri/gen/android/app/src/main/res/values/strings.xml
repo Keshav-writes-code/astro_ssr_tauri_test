@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">android_app_with_ssr</string>
-    <string name="main_activity_title">android_app_with_ssr</string>
+    <string name="app_name">ssr_test</string>
+    <string name="main_activity_title">ssr_test</string>
 </resources>
