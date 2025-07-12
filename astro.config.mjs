@@ -12,7 +12,6 @@ export default defineConfig({
     svelte(),
   ],
 
-  site: "https://Keshav-writes-code.github.io",
+  site: "https://astro-ssr-tauri-test.vercel.app/",
   adapter: vercel(),
 });
-
