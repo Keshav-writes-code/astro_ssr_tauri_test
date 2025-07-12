@@ -1,20 +1,48 @@
 import 'clsx';
 
+const DEV = false;
+
 const HYDRATION_START = '[';
 const HYDRATION_END = ']';
+
+/** allow users to ignore aborted signal errors if `reason.name === 'StaleReactionError` */
+const STALE_REACTION = new (class StaleReactionError extends Error {
+	name = 'StaleReactionError';
+	message = 'The reaction that called `getAbortSignal()` was re-run or destroyed';
+})();
 
 const BLOCK_OPEN = `<!--${HYDRATION_START}-->`;
 const BLOCK_CLOSE = `<!--${HYDRATION_END}-->`;
 
-/** @import { ComponentType, SvelteComponent } from 'svelte' */
-/** @import { Component, Payload, RenderOutput } from '#server' */
-/** @import { Store } from '#shared' */
+class HeadPayload {
+	/** @type {Set<{ hash: string; code: string }>} */
+	css = new Set();
+	out = '';
+	uid = () => '';
+	title = '';
 
-/**
- * Array of `onDestroy` callbacks that should be called at the end of the server render function
- * @type {Function[]}
- */
-let on_destroy = [];
+	constructor(css = new Set(), out = '', title = '', uid = () => '') {
+		this.css = css;
+		this.out = out;
+		this.title = title;
+		this.uid = uid;
+	}
+}
+
+class Payload {
+	/** @type {Set<{ hash: string; code: string }>} */
+	css = new Set();
+	out = '';
+	uid = () => '';
+	select_value = undefined;
+
+	head = new HeadPayload();
+
+	constructor(id_prefix = '') {
+		this.uid = props_id_generator(id_prefix);
+		this.head.uid = this.uid;
+	}
+}
 
 /**
  * Creates an ID generator
@@ -26,6 +54,31 @@ function props_id_generator(prefix) {
 	return () => `${prefix}s${uid++}`;
 }
 
+/** @import { Component } from '#server' */
+
+function reset_elements() {
+	return () => {
+	};
+}
+
+/** @type {AbortController | null} */
+let controller = null;
+
+function abort() {
+	controller?.abort(STALE_REACTION);
+	controller = null;
+}
+
+/** @import { ComponentType, SvelteComponent } from 'svelte' */
+/** @import { Component, RenderOutput } from '#server' */
+/** @import { Store } from '#shared' */
+
+/**
+ * Array of `onDestroy` callbacks that should be called at the end of the server render function
+ * @type {Function[]}
+ */
+let on_destroy = [];
+
 /**
  * Only available on the server and when compiling with the `server` option.
  * Takes a component and returns an object with `body` and `head` properties on it, which you can use to populate the HTML when server-rendering your app.
@@ -35,46 +88,51 @@ function props_id_generator(prefix) {
  * @returns {RenderOutput}
  */
 function render(component, options = {}) {
-	const uid = props_id_generator(options.idPrefix ? options.idPrefix + '-' : '');
-	/** @type {Payload} */
-	const payload = {
-		out: '',
-		css: new Set(),
-		head: { title: '', out: '', css: new Set(), uid },
-		uid
-	};
+	try {
+		const payload = new Payload(options.idPrefix ? options.idPrefix + '-' : '');
 
-	const prev_on_destroy = on_destroy;
-	on_destroy = [];
-	payload.out += BLOCK_OPEN;
+		const prev_on_destroy = on_destroy;
+		on_destroy = [];
+		payload.out += BLOCK_OPEN;
 
-	if (options.context) {
-		push();
-		/** @type {Component} */ (current_component).c = options.context;
+		let reset_reset_element;
+
+		if (DEV) ;
+
+		if (options.context) {
+			push();
+			/** @type {Component} */ (current_component).c = options.context;
+		}
+
+		// @ts-expect-error
+		component(payload, options.props ?? {}, {}, {});
+
+		if (options.context) {
+			pop();
+		}
+
+		if (reset_reset_element) {
+			reset_reset_element();
+		}
+
+		payload.out += BLOCK_CLOSE;
+		for (const cleanup of on_destroy) cleanup();
+		on_destroy = prev_on_destroy;
+
+		let head = payload.head.out + payload.head.title;
+
+		for (const { hash, code } of payload.css) {
+			head += `<style id="${hash}">${code}</style>`;
+		}
+
+		return {
+			head,
+			html: payload.out,
+			body: payload.out
+		};
+	} finally {
+		abort();
 	}
-
-	// @ts-expect-error
-	component(payload, options.props ?? {}, {}, {});
-
-	if (options.context) {
-		pop();
-	}
-
-	payload.out += BLOCK_CLOSE;
-	for (const cleanup of on_destroy) cleanup();
-	on_destroy = prev_on_destroy;
-
-	let head = payload.head.out + payload.head.title;
-
-	for (const { hash, code } of payload.css) {
-		head += `<style id="${hash}">${code}</style>`;
-	}
-
-	return {
-		head,
-		html: payload.out,
-		body: payload.out
-	};
 }
 
 /** @import { Component } from '#server' */
@@ -102,7 +160,7 @@ function pop() {
 }
 
 /** @import { Snippet } from 'svelte' */
-/** @import { Payload } from '#server' */
+/** @import { Payload } from '../payload' */
 /** @import { Getters } from '#shared' */
 
 /**
