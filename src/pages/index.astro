@@ -8,15 +8,23 @@
 	</head>
 	<body class="grid place-items-center h-screen" >
     <div id="text" ></div>
+    Hello
+    Hio
 	</body>
 </html>
 <script>
-  async function main() {
-    const res = await fetch("/2");
-    const data = await res.json();
-    const elem = document.getElementById('text');
-    if (!elem) return;
-    elem.innerText = JSON.stringify(data);
-  }
+async function main() {
+  const res = await fetch("https://astro-ssr-tauri-test.vercel.app/2",{
+    mode: 'no-cors',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }});
+  const data = await res.json();
+  const elem = document.getElementById('text');
+  if (!elem) return;
+  console.log(data)
+  elem.innerText = JSON.parse(data);
+}
   main();
 </script>
